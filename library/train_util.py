@@ -4026,8 +4026,10 @@ def read_config_from_file(args: argparse.Namespace, parser: argparse.ArgumentPar
             ignore_nesting_dict[key] = value
 
     config_args = argparse.Namespace(**ignore_nesting_dict)
-    args = parser.parse_args(namespace=config_args)
-    args.config_file = os.path.splitext(args.config_file)[0]
+    # note: uses empty args to avoid use of sys.argv (pytest conflict)
+    args = parser.parse_args(args=[], namespace=config_args)
+    if args.config_file:
+        args.config_file = os.path.splitext(args.config_file)[0]
     logger.info(args.config_file)
 
     return args
